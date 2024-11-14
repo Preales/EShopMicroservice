@@ -12,10 +12,13 @@ public class StoreBasketCommandValidator : AbstractValidator<StoreBasketCommand>
         RuleFor(x => x.Cart.UserName).NotEmpty().WithMessage("UserName is required");
     }
 }
-public class StoreBasketCommandHandler : ICommandHandler<StoreBasketCommand, StoreBasketResult>
+public class StoreBasketCommandHandler(IBasketRepository repository)
+    : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
-    public Task<StoreBasketResult> Handle(StoreBasketCommand request, CancellationToken cancellationToken)
+    public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await repository.StoreBasket(command.Cart);
+
+        return new StoreBasketResult(command.Cart.UserName);
     }
 }

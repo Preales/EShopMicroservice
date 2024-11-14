@@ -12,11 +12,13 @@ public class DeleteBasketCommandValidator : AbstractValidator<DeleteBasketComman
     }
 }
 
-public class DeleteBasketCommandHandler
+public class DeleteBasketCommandHandler(IBasketRepository repository)
     : ICommandHandler<DeleteBasketCommand, DeleteBasketResult>
 {
-    public Task<DeleteBasketResult> Handle(DeleteBasketCommand request, CancellationToken cancellationToken)
+    public async Task<DeleteBasketResult> Handle(DeleteBasketCommand command, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await repository.DeleteBasket(command.UserName, cancellationToken);
+
+        return new DeleteBasketResult(true);
     }
 }
